@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import type {User} from '../types/User';
 import {userService} from '../services/userService';
-import './UserDetail.css';
+import '../styles/UserDetail.css';
 
 function UserDetail() {
     const {id} = useParams<{ id: string }>();

@@ -1,4 +1,4 @@
-import './FavoriteButton.css';
+import '../styles/FavoriteButton.css';
 import { MdOutlineFavoriteBorder, MdFavorite } from 'react-icons/md';
 
 interface FavoriteButtonProps {

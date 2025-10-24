@@ -5,7 +5,7 @@ import {userService} from '../services/userService';
 import { useFavorites } from './userFavorite';
 import SkeletonLoader from './SkeletonLoader';
 import ErrorMessage from './ErrorMessage';
-import './UserList.css';
+import '../styles/UserList.css';
 
 interface UserListProps {
     searchTerm: string;

@@ -1,4 +1,4 @@
-import './SkeletonLoader.css';
+import '../styles/SkeletonLoader.css';
 
 export default function SkeletonLoader() {
     return (
@@ -13,4 +13,3 @@ export default function SkeletonLoader() {
         </div>
     );
 }
-

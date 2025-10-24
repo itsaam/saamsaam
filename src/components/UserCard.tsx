@@ -1,7 +1,7 @@
 import type {User} from '../types/User';
 import {Link} from 'react-router-dom';
 import FavoriteButton from './FavoriteButton';
-import './UserCard.css';
+import '../styles/UserCard.css';
 
 interface UserCardProps {
     user: User;

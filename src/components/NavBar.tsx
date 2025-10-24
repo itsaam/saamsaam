@@ -1,5 +1,5 @@
-import './NavBar.css';
-import ThemeToggle from '../styles/ThemeToggle.css';
+import '../styles/NavBar.css';
+import ThemeToggle from './ThemeToggle';
 
 interface NavBarProps {
     searchTerm: string;
