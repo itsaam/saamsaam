@@ -2,7 +2,7 @@ import {useState, useEffect, useMemo} from 'react';
 import UserCard from './UserCard';
 import type {User} from '../types/User';
 import {userService} from '../services/userService';
-import { useFavorites } from './userFavorite';
+import useFavorites from '../hooks/useFavorites';
 import SkeletonLoader from './SkeletonLoader';
 import ErrorMessage from './ErrorMessage';
 import '../styles/UserList.css';
@@ -86,23 +86,27 @@ export default function UserList({searchTerm, sortBy}: UserListProps) {
                 ))}
             </div>
 
-            {totalPages > 1 && (
-                <div className="pagination">
-                    <button
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                    >
-                        ← Précédent
-                    </button>
-                    <span>Page {currentPage} / {totalPages}</span>
-                    <button
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                    >
-                        Suivant →
-                    </button>
-                </div>
+            {filteredAndSortedUsers.length === 0 && (
+                <p className="muted">Aucun utilisateur trouvé</p>
             )}
-        </div>
-    );
+
+             {totalPages > 1 && (
+                 <div className="pagination">
+                     <button
+                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                         disabled={currentPage === 1}
+                     >
+                         ← Précédent
+                     </button>
+                     <span>Page {currentPage} / {totalPages}</span>
+                     <button
+                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                         disabled={currentPage === totalPages}
+                     >
+                         Suivant →
+                     </button>
+                 </div>
+             )}
+         </div>
+     );
 }

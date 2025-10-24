@@ -22,9 +22,11 @@ export const ItemList = () => {
         setLoading(true);
         setError(null);
         try {
-            // Remplacez par votre service/API si nécessaire
             const res = await fetch("/api/items");
-            if (!res.ok) throw new Error("Erreur réseau");
+            if (!res.ok) {
+                setError('Erreur réseau');
+                return;
+            }
             const data = await res.json();
             setItems(data);
         } catch (e) {
@@ -36,8 +38,7 @@ export const ItemList = () => {
     };
 
     useEffect(() => {
-        fetchItems();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        void fetchItems();
     }, []);
 
     const filteredSorted = useMemo(() => {
