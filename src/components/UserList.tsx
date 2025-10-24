@@ -2,7 +2,7 @@ import {useState, useEffect, useMemo} from 'react';
 import UserCard from './UserCard';
 import type {User} from '../types/User';
 import {userService} from '../services/userService';
-import useFavorites from '../hooks/useFavorites';
+import {useFavorites} from '../hooks/useFavorites';
 import SkeletonLoader from './SkeletonLoader';
 import ErrorMessage from './ErrorMessage';
 import '../styles/UserList.css';

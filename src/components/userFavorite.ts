@@ -1,2 +1,2 @@
-export {default as useFavorites} from '../hooks/useFavorites'
+export {useFavorites} from '../hooks/useFavorites';
 
