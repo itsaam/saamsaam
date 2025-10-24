@@ -1,33 +1,42 @@
-// File: src/hooks/useFavorites.ts
-        import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
-        const KEY = "favorites_v1";
+const KEY = 'favorites_v1';
 
-        export const useFavorites = () => {
-          const [setIds, setSetIds] = useState<Set<string>>(() => {
-            try {
-              const raw = localStorage.getItem(KEY);
-              return raw ? new Set(JSON.parse(raw)) : new Set();
-            } catch {
-              return new Set();
-            }
-          });
+// Stocke les IDs sous forme de string pour être compatible avec number|string
+export const useFavorites = () => {
+  const [setIds, setSetIds] = useState<Set<string>>(() => {
+    try {
+      const raw = localStorage.getItem(KEY);
+      return raw ? new Set<string>(JSON.parse(raw)) : new Set<string>();
+    } catch (e) {
+      console.warn('localStorage read failed', e);
+      return new Set<string>();
+    }
+  });
 
-          useEffect(() => {
-            try {
-              localStorage.setItem(KEY, JSON.stringify(Array.from(setIds)));
-            } catch {}
-          }, [setIds]);
+  useEffect(() => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(Array.from(setIds)));
+    } catch (e) {
+      console.warn('localStorage write failed', e);
+    }
+  }, [setIds]);
 
-          const toggle = useCallback((id: string) => {
-            setSetIds(prev => {
-              const copy = new Set(prev);
-              if (copy.has(id)) copy.delete(id); else copy.add(id);
-              return copy;
-            });
-          }, []);
+  const toKey = useCallback((id: string | number) => String(id), []);
 
-          const isFav = useCallback((id: string) => setIds.has(id), [setIds]);
+  const toggle = useCallback((id: string | number) => {
+    setSetIds(prev => {
+      const copy = new Set(prev);
+      const k = toKey(id);
+      if (copy.has(k)) copy.delete(k); else copy.add(k);
+      return copy;
+    });
+  }, [toKey]);
 
-          return { isFav, toggle, favorites: setIds };
-        };
+  const isFav = useCallback((id: string | number) => setIds.has(toKey(id)), [setIds, toKey]);
+
+  const toggleFavorite = toggle;
+  const isFavorite = isFav;
+
+  return { favorites: setIds, toggle, isFav, toggleFavorite, isFavorite };
+};
