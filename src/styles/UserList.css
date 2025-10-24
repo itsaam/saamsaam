@@ -1,0 +1,79 @@
+/* Container principal */
+.user-list {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Grille des utilisateurs */
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 30px 20px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 24px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #1565c0;
+    transform: translateY(-2px);
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pagination span {
+    font-weight: 500;
+    font-size: 15px;
+    color: #333;
+}
+
+/* Messages de chargement et erreur */
+.loading,
+.error {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+}
+
+.error {
+    color: #d32f2f;
+}
+
+/* Support du thème sombre */
+body.dark .pagination span {
+    color: #e0e0e0;
+}
+
+body.dark .pagination button {
+    background-color: #1976d2;
+}
+
+body.dark .pagination button:hover:not(:disabled) {
+    background-color: #1565c0;
+}
