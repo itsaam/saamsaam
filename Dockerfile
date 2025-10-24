@@ -1,25 +1,33 @@
 FROM node:18-alpine AS builder
+
 WORKDIR /app
 
-# Install dependencies (use npm install to support cases without package-lock.json)
-COPY package.json package-lock.json* ./
+# Copier les fichiers de dépendances
+COPY package*.json ./
+
+# Installer les dépendances
 RUN npm install --no-audit --no-fund --silent
 
-# Copy source and build
+# Copier le reste du code source
 COPY . .
+
+# Construire l'application (sortie dans /dist)
 RUN npm run build
 
-# Production image using nginx to serve the built static files
-FROM nginx:stable-alpine
 
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
+# ---- Étape 2 : Image minimale sans Nginx ----
+FROM alpine:3.19
 
-# Copy built files from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Use a custom nginx configuration to support SPA routing (history fallback)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copier uniquement les fichiers statiques construits
+COPY --from=builder /app/dist /app
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Installer un mini serveur pour tester (optionnel)
+RUN apk add --no-cache nodejs npm && npm install -g serve
+
+# Expose un port peu utilisé pour éviter les conflits
+EXPOSE 8081
+
+# Lancer le serveur de fichiers statiques
+CMD ["serve", "-s", "/app", "-l", "8081"]
