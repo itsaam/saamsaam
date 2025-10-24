@@ -1,25 +1,33 @@
-import { useState, useEffect } from 'react';
+// File: src/hooks/useFavorites.ts
+        import { useState, useEffect, useCallback } from "react";
 
-export function useFavorites() {
-    const [favorites, setFavorites] = useState<number[]>(() => {
-        const saved = localStorage.getItem('favorites');
-        return saved ? JSON.parse(saved) : [];
-    });
+        const KEY = "favorites_v1";
 
-    useEffect(() => {
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-    }, [favorites]);
+        export const useFavorites = () => {
+          const [setIds, setSetIds] = useState<Set<string>>(() => {
+            try {
+              const raw = localStorage.getItem(KEY);
+              return raw ? new Set(JSON.parse(raw)) : new Set();
+            } catch {
+              return new Set();
+            }
+          });
 
-    const toggleFavorite = (userId: number) => {
-        setFavorites(prev =>
-            prev.includes(userId)
-                ? prev.filter(id => id !== userId)
-                : [...prev, userId]
-        );
-    };
+          useEffect(() => {
+            try {
+              localStorage.setItem(KEY, JSON.stringify(Array.from(setIds)));
+            } catch {}
+          }, [setIds]);
 
-    const isFavorite = (userId: number) => favorites.includes(userId);
+          const toggle = useCallback((id: string) => {
+            setSetIds(prev => {
+              const copy = new Set(prev);
+              if (copy.has(id)) copy.delete(id); else copy.add(id);
+              return copy;
+            });
+          }, []);
 
-    return { favorites, toggleFavorite, isFavorite };
-}
+          const isFav = useCallback((id: string) => setIds.has(id), [setIds]);
 
+          return { isFav, toggle, favorites: setIds };
+        };
