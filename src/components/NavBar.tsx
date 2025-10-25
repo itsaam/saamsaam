@@ -1,6 +1,7 @@
 import '../styles/NavBar.css';
 import ThemeToggle from './ThemeToggle';
 import {MdClear} from 'react-icons/md';
+import {memo} from 'react';
 
 interface NavBarProps {
     searchTerm: string;
@@ -13,7 +14,7 @@ interface NavBarProps {
     favoritesCount: number;
 }
 
-export default function NavBar(props: NavBarProps) {
+const NavBar = memo(function NavBar(props: NavBarProps) {
     const {
         searchTerm,
         onSearchChange,
@@ -59,4 +60,6 @@ export default function NavBar(props: NavBarProps) {
             <ThemeToggle />
         </nav>
     );
-}
+});
+
+export default NavBar;
