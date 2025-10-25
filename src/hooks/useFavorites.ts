@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import toast from 'react-hot-toast';
 
 const KEY = 'favorites_v1';
 
-// Stocke les IDs sous forme de string pour être compatible avec number|string
 export const useFavorites = () => {
   const [setIds, setSetIds] = useState<Set<string>>(() => {
     try {
@@ -28,7 +28,13 @@ export const useFavorites = () => {
     setSetIds(prev => {
       const copy = new Set(prev);
       const k = toKey(id);
-      if (copy.has(k)) copy.delete(k); else copy.add(k);
+      if (copy.has(k)) {
+        copy.delete(k);
+        toast.success('Retiré des favoris', { id: `fav-${k}` });
+      } else {
+        copy.add(k);
+        toast.success('Ajouté aux favoris ⭐', { id: `fav-${k}` });
+      }
       return copy;
     });
   }, [toKey]);
@@ -38,9 +44,13 @@ export const useFavorites = () => {
   const toggleFavorite = toggle;
   const isFavorite = isFav;
 
-    const clearAll = useCallback(() => {
-        setSetIds(new Set<string>());
-    }, []);
+  const clearAll = useCallback(() => {
+    const count = setIds.size;
+    setSetIds(new Set<string>());
+    if (count > 0) {
+      toast.success(`${count} favoris supprimés`);
+    }
+  }, [setIds]);
 
-    return {favorites: setIds, toggle, isFav, toggleFavorite, isFavorite, clearAll};
+  return {favorites: setIds, toggle, isFav, toggleFavorite, isFavorite, clearAll};
 };
