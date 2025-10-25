@@ -1,9 +1,8 @@
-import {useState, useEffect, useMemo} from 'react';
+import {useState, useMemo} from 'react';
 import UserCard from './UserCard';
-import type {User} from '../types/User';
-import {userService} from '../services/userService';
 import SkeletonLoader from './SkeletonLoader';
 import ErrorMessage from './ErrorMessage';
+import {useUsers} from '../hooks/useUsers';
 import '../styles/UserList.css';
 
 interface UserListProps {
@@ -14,37 +13,26 @@ interface UserListProps {
 }
 
 export default function UserList({searchTerm, sortBy, toggleFavorite, isFavorite}: UserListProps) {
-    const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const {users, loading, error, reload} = useUsers();
     const [currentPage, setCurrentPage] = useState(1);
+    const [cityFilter, setCityFilter] = useState('all');
 
     const usersPerPage = 10;
 
-    const loadUsers = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const data = await userService.getAllUsers();
-            setUsers(data);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Erreur inconnue');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        loadUsers();
-    }, []);
-
-    // Optimisation avec useMemo
     const filteredAndSortedUsers = useMemo(() => {
-        const result = users.filter(user =>
-            user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        const searchWords = searchTerm.toLowerCase().trim().split(/\s+/).filter(word => word.length > 0);
+
+        let result = users.filter(user => {
+            if (searchWords.length === 0) return true;
+
+            const userInfo = `${user.firstName} ${user.lastName} ${user.email}`.toLowerCase();
+
+            return searchWords.every(word => userInfo.includes(word));
+        });
+
+        if (cityFilter !== 'all') {
+            result = result.filter(user => user.address.city === cityFilter);
+        }
 
         result.sort((a, b) => {
             if (sortBy === 'name') {
@@ -54,7 +42,6 @@ export default function UserList({searchTerm, sortBy, toggleFavorite, isFavorite
             }
         });
 
-        // Favoris en premier
         result.sort((a, b) => {
             const aFav = isFavorite(a.id);
             const bFav = isFavorite(b.id);
@@ -64,17 +51,41 @@ export default function UserList({searchTerm, sortBy, toggleFavorite, isFavorite
         });
 
         return result;
-    }, [users, searchTerm, sortBy, isFavorite]);
+    }, [users, searchTerm, sortBy, isFavorite, cityFilter]);
 
     const totalPages = Math.ceil(filteredAndSortedUsers.length / usersPerPage);
     const startIndex = (currentPage - 1) * usersPerPage;
     const currentUsers = filteredAndSortedUsers.slice(startIndex, startIndex + usersPerPage);
 
     if (loading) return <SkeletonLoader/>;
-    if (error) return <ErrorMessage message={error} onRetry={loadUsers}/>;
+    if (error) return <ErrorMessage message={error} onRetry={reload}/>;
 
     return (
         <div>
+            <div style={{padding: '20px', textAlign: 'center'}}>
+                <select
+                    value={cityFilter}
+                    onChange={(e) => setCityFilter(e.target.value)}
+                    style={{
+                        padding: '8px 12px',
+                        border: '1px solid #00ff9d',
+                        borderRadius: '4px',
+                        fontSize: '14px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <option value="all">Toutes les villes</option>
+                    <option value="Phoenix">Phoenix</option>
+                    <option value="Houston">Houston</option>
+                    <option value="Columbus">Columbus</option>
+                    <option value="Jacksonville">Jacksonville</option>
+                    <option value="San Antonio">San Antonio</option>
+                    <option value="Fort Worth">Fort Worth</option>
+                    <option value="Charlotte">Charlotte</option>
+                    <option value="Seattle">Seattle</option>
+                </select>
+            </div>
+
             <div className="user-grid">
                 {currentUsers.map(user => (
                     <UserCard
@@ -110,3 +121,4 @@ export default function UserList({searchTerm, sortBy, toggleFavorite, isFavorite
          </div>
      );
 }
+
