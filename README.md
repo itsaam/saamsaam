@@ -4,7 +4,7 @@ Application React + TypeScript permettant de consulter, rechercher et gérer une
 
 ## 🚀 Démo
 
-**Déployé sur Vercel** : [Lien vers l'application]
+**Déployé sur Vercel** : [https://saamsaam.vercel.app/](https://saamsaam.vercel.app/)
 
 ---
 
@@ -164,33 +164,25 @@ La recherche supporte **plusieurs mots** :
 
 
 
-## 🧪 Tests
-
-Pour tester l'application :
-
-```bash
-# Lancer en dev
-npm run dev
-
-# Tester les fonctionnalités :
-# 1. Recherche multi-mots : "emily johnson"
-# 2. Ajouter/retirer des favoris
-# 3. Changer le thème (persistance)
-# 4. Pagination (10 users/page)
-# 5. Simuler erreur réseau (DevTools → Offline)
-# 6. Accéder à un user inexistant : /user/999
-```
-
----
 
 ## 📝 Améliorations futures
 
 - [ ] Pagination serveur (API `?limit=10&skip=0`)
 - [ ] Mode hors ligne avec cache des favoris
-- [ ] Tests unitaires (Vitest)
 - [ ] Filtres avancés (ville, entreprise, etc.)
 - [ ] Export des favoris en CSV
 - [ ] Comparateur de 2 utilisateurs
+
+---
+
+## 🧪 Tests
+
+Tests unitaires implémentés avec **Vitest** sur le hook `useUsers()`.
+
+```bash
+npm test       # Lancer les tests
+npm run test:run   # Une seule fois
+```
 
 ---
 
