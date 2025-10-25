@@ -2,7 +2,6 @@ import {useState, useEffect, useMemo} from 'react';
 import UserCard from './UserCard';
 import type {User} from '../types/User';
 import {userService} from '../services/userService';
-import {useFavorites} from '../hooks/useFavorites';
 import SkeletonLoader from './SkeletonLoader';
 import ErrorMessage from './ErrorMessage';
 import '../styles/UserList.css';
@@ -10,14 +9,15 @@ import '../styles/UserList.css';
 interface UserListProps {
     searchTerm: string;
     sortBy: 'name' | 'age';
+    toggleFavorite: (userId: number) => void;
+    isFavorite: (userId: number) => boolean;
 }
 
-export default function UserList({searchTerm, sortBy}: UserListProps) {
+export default function UserList({searchTerm, sortBy, toggleFavorite, isFavorite}: UserListProps) {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const {toggleFavorite, isFavorite} = useFavorites();
 
     const usersPerPage = 10;
 

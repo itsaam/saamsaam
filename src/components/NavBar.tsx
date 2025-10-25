@@ -1,5 +1,6 @@
 import '../styles/NavBar.css';
 import ThemeToggle from './ThemeToggle';
+import {MdClear} from 'react-icons/md';
 
 interface NavBarProps {
     searchTerm: string;
@@ -8,6 +9,8 @@ interface NavBarProps {
     onSortChange: (value: 'name' | 'age') => void;
     showBackButton?: boolean;
     onBackClick?: () => void;
+    onClearFavorites: () => void;
+    favoritesCount: number;
 }
 
 export default function NavBar(props: NavBarProps) {
@@ -18,7 +21,10 @@ export default function NavBar(props: NavBarProps) {
         onSortChange,
         showBackButton,
         onBackClick,
+        onClearFavorites,
+        favoritesCount,
     } = props;
+
 
     return (
         <nav className="navbar">
@@ -40,6 +46,15 @@ export default function NavBar(props: NavBarProps) {
                 <option value="name">Trier par nom</option>
                 <option value="age">Trier par âge</option>
             </select>
+
+            <button
+                onClick={onClearFavorites}
+                className="clear-favorites-btn"
+                title="Supprimer tous les favoris"
+                disabled={favoritesCount === 0}
+            >
+                <MdClear/> Effacer favoris
+            </button>
 
             <ThemeToggle />
         </nav>

@@ -38,5 +38,9 @@ export const useFavorites = () => {
   const toggleFavorite = toggle;
   const isFavorite = isFav;
 
-  return { favorites: setIds, toggle, isFav, toggleFavorite, isFavorite };
+    const clearAll = useCallback(() => {
+        setSetIds(new Set<string>());
+    }, []);
+
+    return {favorites: setIds, toggle, isFav, toggleFavorite, isFavorite, clearAll};
 };
