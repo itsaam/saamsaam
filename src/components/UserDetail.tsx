@@ -1,11 +1,12 @@
 import {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import type {User} from '../types/User';
 import {userService} from '../services/userService';
 import '../styles/UserDetail.css';
 
 function UserDetail() {
     const {id} = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -25,8 +26,16 @@ function UserDetail() {
     }, [id]);
 
     if (loading) return <div className="loading">Loading...</div>;
-    if (error) return <div className="error">{error}</div>;
-    if (!user) return <div className="error">Utilisateur non trouvé</div>;
+
+    if (error || !user) {
+        return (
+            <div style={{padding: '40px', textAlign: 'center'}}>
+                <h1>404</h1>
+                <p>Utilisateur non trouvé</p>
+                <button onClick={() => navigate('/')}>← Retour à la liste</button>
+            </div>
+        );
+    }
 
     return (
         <div className="user-detail">
