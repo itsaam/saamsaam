@@ -1,4 +1,3 @@
-// File: `src/components/ThemeToggle.tsx`
 import type { MouseEvent } from "react";
 import { useTheme } from "../contexts/theme";
 import "../styles/ThemeToggle.css";

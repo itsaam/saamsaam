@@ -36,6 +36,23 @@
     background-color: #333333;
 }
 
+.clear-favorites-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #d32f2f !important;
+}
+
+.clear-favorites-btn:hover:not(:disabled) {
+    background-color: #b71c1c !important;
+}
+
+.clear-favorites-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #666 !important;
+}
+
 body.dark .navbar {
     background-color: #2a2a2a;
 }

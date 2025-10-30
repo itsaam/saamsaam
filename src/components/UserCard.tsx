@@ -1,6 +1,7 @@
 import type {User} from '../types/User';
 import {Link} from 'react-router-dom';
 import FavoriteButton from './FavoriteButton';
+import {memo} from 'react';
 import '../styles/UserCard.css';
 
 interface UserCardProps {
@@ -9,7 +10,7 @@ interface UserCardProps {
     onToggleFavorite: (userId: number) => void;
 }
 
-function UserCard({user, isFavorite, onToggleFavorite}: UserCardProps) {
+const UserCard = memo(function UserCard({user, isFavorite, onToggleFavorite}: UserCardProps) {
     return (
         <Link to={`/user/${user.id}`} className="user-card">
             <FavoriteButton
@@ -22,6 +23,6 @@ function UserCard({user, isFavorite, onToggleFavorite}: UserCardProps) {
             <p>{user.email}</p>
         </Link>
     );
-}
+});
 
 export default UserCard;
