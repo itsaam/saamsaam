@@ -103,6 +103,8 @@ src/
 │   └── User.ts         # Types TypeScript
 └── App.tsx             # Composant racine
 ```
+main
+
 
 ---
 
@@ -197,4 +199,5 @@ npm run test:run   # Une seule fois
 MIT - Libre d'utilisation
 
 
+main
 test
